@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thil SuperStart</title>
+<style>
+:root {
+  --accent: #7c5cfc;
+  --accent-dim: rgba(124,92,252,0.15);
+  --card-bg: rgba(255,255,255,0.05);
+  --card-brd: rgba(255,255,255,0.08);
+  --card-brd-h: rgba(255,255,255,0.18);
+  --text: #fff;
+  --text-dim: rgba(255,255,255,0.6);
+  --text-muted: rgba(255,255,255,0.35);
+  --shadow: 0 8px 32px rgba(0,0,0,0.4);
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+  --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --blur: 20px;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { height: 100%; }
+body {
+  font-family: var(--font);
+  min-height: 100vh;
+  color: var(--text);
+  background: #0b0b12;
+  position: relative;
+  overflow-y: auto;
+  font-size: 16px;
+}
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  background-position: center top;
+  background-size: cover;
+  background-attachment: fixed;
+  z-index: 0;
+}
+.bg-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  z-index: 1;
+}
+.container {
+  position: relative;
+  z-index: 2;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.search-wrap {
+  max-width: 520px;
+  margin: 24px auto 20px;
+  width: 100%;
+}
+.search-inner {
+  display: flex;
+  align-items: center;
+  background: var(--card-bg);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border: 1px solid var(--card-brd);
+  border-radius: 40px;
+  padding: 10px 20px;
+  transition: var(--transition);
+  box-shadow: var(--shadow);
+}
+.search-inner:focus-within {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+  box-shadow: 0 0 0 3px rgba(124,92,252,0.12), var(--shadow);
+}
+.search-icon {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  margin-left: 10px;
+  width: 18px; height: 18px;
+}
+.search-field {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 15px;
+  direction: rtl;
+}
+.search-field::placeholder { color: var(--text-muted); }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  flex: 1;
+}
+.card {
+  background: var(--card-bg);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border: 1px solid var(--card-brd);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  transition: var(--transition);
+  box-shadow: var(--shadow);
+}
+.card:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: var(--card-brd-h);
+}
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 14px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+.card-head svg { opacity: 0.5; flex-shrink: 0; }
+.card-body-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.clock-time {
+  font-size: 52px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, #fff 40%, var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.05;
+}
+.clock-date {
+  font-size: 14px;
+  color: var(--text-dim);
+  margin-top: 3px;
+  font-weight: 500;
+}
+.weather-body { gap: 6px; padding: 4px 0; }
+.weather-main { display: flex; align-items: center; gap: 10px; }
+.weather-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
+.weather-icon svg { width: 38px; height: 38px; stroke: var(--accent); }
+.weather-temp { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; }
+.weather-desc { font-size: 13px; color: var(--text-dim); }
+.weather-meta {
+  display: flex; gap: 14px; margin-top: 5px; font-size: 12px; color: var(--text-muted); direction: ltr;
+}
+.weather-meta span { display: flex; align-items: center; gap: 3px; }
+.weather-meta svg { width: 13px; height: 13px; opacity: 0.6; }
+.bookmarks-group { margin-bottom: 18px; }
+.bookmarks-group:last-child { margin-bottom: 0; }
+.group-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+  margin-bottom: 8px;
+}
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+  gap: 6px;
+}
+.link-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  color: var(--text);
+  position: relative;
+}
+.link-item:hover { background: rgba(255,255,255,0.06); }
+.link-icon {
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,0.05);
+  border-radius: var(--radius-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  overflow: hidden;
+}
+.link-item:hover .link-icon { background: rgba(255,255,255,0.10); transform: scale(1.06); }
+.link-icon img { width: 20px; height: 20px; border-radius: 2px; }
+.link-label {
+  font-size: 10px; color: var(--text-muted);
+  text-align: center; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap;
+  max-width: 50px; font-weight: 500;
+}
+.todo-list { display: flex; flex-direction: column; gap: 4px; }
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: var(--radius-xs);
+  transition: var(--transition);
+}
+.todo-item:hover { background: rgba(255,255,255,0.04); }
+.todo-cb { width: 15px; height: 15px; accent-color: #34d399; cursor: pointer; flex-shrink: 0; border-radius: 3px; }
+.todo-txt { flex: 1; font-size: 13px; }
+.todo-txt.done { text-decoration: line-through; color: var(--text-muted); }
+@media (max-width: 900px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .grid { grid-template-columns: 1fr; }
+  .clock-time { font-size: 40px; }
+  .container { padding: 12px; }
+}
+.ftr {
+  text-align: center;
+  padding: 20px 0 10px;
+  color: var(--text-muted);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+.dim { color: var(--text-muted); font-size: 13px; text-align: center; padding: 16px; }
+</style>
+</head>
+<body>
+
+<div class="bg-layer" style="background:radial-gradient(ellipse at center,#1a1a2e,#0b0b12);"></div>
+<div id="bgImage" class="bg-layer" style="display:none;"></div>
+<div class="bg-overlay"></div>
+
+<div class="container">
+
+  <div class="search-wrap">
+    <div class="search-inner">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" class="search-field" id="searchInput" placeholder="ابحث في Google ..." autofocus>
+    </div>
+  </div>
+
+  <div class="grid" id="mainGrid">
+
+    <div class="card" id="cardBookmarks" style="grid-column:1/3;grid-row:1/3;">
+      <div class="card-head">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+        </svg>
+        <span>الروابط</span>
+      </div>
+      <div class="card-body" id="bookmarksContainer"></div>
+    </div>
+
+    <div class="card card-clock" id="cardClock">
+      <div class="card-body card-body-center">
+        <div class="clock-time" id="timeDisplay">00:00</div>
+        <div class="clock-date" id="dateDisplay">---</div>
+      </div>
+    </div>
+
+    <div class="card card-weather" id="cardWeather">
+      <div class="card-head">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+        </svg>
+        <span>الطقس</span>
+      </div>
+      <div class="card-body card-body-center weather-body" id="weatherContent">
+        <div class="dim">جاري التحميل ...</div>
+      </div>
+    </div>
+
+    <div class="card" id="cardTodos" style="grid-column:3/5;">
+      <div class="card-head">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+        </svg>
+        <span>المهام</span>
+      </div>
+      <div class="card-body">
+        <div class="todo-list" id="todoContainer"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="ftr">Thil SuperStart</footer>
+</div>
+
+<script>
+const BOOKMARK_GROUPS = [
+  {
+    title: "الروابط السريعة",
+    links: [
+      { name: "X", url: "https://x.com" },
+      { name: "Keep", url: "https://keep.google.com" },
+      { name: "Discord", url: "https://discord.com/app" },
+      { name: "TikTok", url: "https://tiktok.com" },
+      { name: "GitHub", url: "https://github.com" },
+      { name: "دليلك", url: "https://dalilek.online" }
+    ]
+  },
+  {
+    title: "أدوات الذكاء الاصطناعي",
+    links: [
+      { name: "AI Studio", url: "https://aistudio.google.com" },
+      { name: "ChatGPT", url: "https://chatgpt.com" },
+      { name: "Claude", url: "https://claude.ai" },
+      { name: "Perplexity", url: "https://perplexity.ai" },
+      { name: "Tripadvisor", url: "https://tripadvisor.com" },
+      { name: "IMDb", url: "https://imdb.com" }
+    ]
+  },
+  {
+    title: "أدوات النشر",
+    links: [
+      { name: "دليلك", url: "https://dalilek.online/bulk-admin" },
+      { name: "Search Console", url: "https://search.google.com/search-console" },
+      { name: "CNN", url: "https://cnn.com" },
+      { name: "Daily Mail", url: "https://dailymail.co.uk" },
+      { name: "Reuters", url: "https://reuters.com" },
+      { name: "BBC", url: "https://bbc.com" }
+    ]
+  }
+];
+
+const TODOS = [
+  { text: "Customize My SuperStart Page.", done: false },
+  { text: "Buy Milk & Eggs", done: false },
+  { text: "Review project proposal", done: false },
+  { text: "Schedule meeting with team", done: false }
+];
+
+function esc(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+
+function renderBookmarks() {
+  const c = document.getElementById('bookmarksContainer');
+  let html = '';
+  BOOKMARK_GROUPS.forEach(g => {
+    html += `<div class="bookmarks-group"><div class="group-title">${esc(g.title)}</div><div class="links-grid">`;
+    g.links.forEach(l => {
+      const letter = l.name.charAt(0).toUpperCase();
+      const hue = [...l.name].reduce((a,ch)=>a+ch.charCodeAt(0),0) % 360;
+      html += `<a class="link-item" href="${esc(l.url)}" target="_blank" title="${esc(l.name)}">
+        <div class="link-icon" style="background:hsla(${hue},60%,50%,0.2);color:hsla(${hue},80%,70%,1);font-weight:700;font-size:16px;">${esc(letter)}</div>
+        <span class="link-label">${esc(l.name)}</span>
+      </a>`;
+    });
+    html += `</div></div>`;
+  });
+  c.innerHTML = html;
+}
+
+function renderTodos() {
+  const c = document.getElementById('todoContainer');
+  if (!TODOS.length) { c.innerHTML = '<div class="dim">لا توجد مهام</div>'; return; }
+  c.innerHTML = TODOS.map((t,i) =>
+    `<div class="todo-item"><input type="checkbox" class="todo-cb" ${t.done?'checked':''} data-i="${i}">
+     <span class="todo-txt ${t.done?'done':''}">${esc(t.text)}</span></div>`
+  ).join('');
+  c.querySelectorAll('.todo-cb').forEach(el => {
+    el.addEventListener('change', function() {
+      const i = parseInt(this.dataset.i);
+      TODOS[i].done = this.checked;
+      renderTodos();
+    });
+  });
+}
+
+function fmtTime(d) {
+  return d.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Africa/Cairo' });
+}
+
+function fmtDate(d) {
+  return d.toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Africa/Cairo' });
+}
+
+function tick() {
+  const n = new Date();
+  document.getElementById('timeDisplay').textContent = fmtTime(n);
+  document.getElementById('dateDisplay').textContent = fmtDate(n);
+}
+
+const WTHR_ICONS = {
+  clear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>',
+  cloudy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>',
+  partly: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="9" r="4"/><line x1="8" y1="1" x2="8" y2="3"/><line x1="8" y1="15" x2="8" y2="17"/><line x1="1" y1="9" x2="3" y2="9"/><line x1="13" y1="9" x2="15" y2="9"/><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>',
+  rain: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="16" y1="13" x2="16" y2="21"/><line x1="8" y1="13" x2="8" y2="21"/><line x1="12" y1="15" x2="12" y2="23"/><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/></svg>',
+  snow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/><line x1="8" y1="16" x2="8.01" y2="16"/><line x1="8" y1="20" x2="8.01" y2="20"/><line x1="12" y1="18" x2="12.01" y2="18"/><line x1="12" y1="22" x2="12.01" y2="22"/><line x1="16" y1="16" x2="16.01" y2="16"/><line x1="16" y1="20" x2="16.01" y2="20"/></svg>',
+  thunder: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 9"/><polyline points="13 11 9 17 13 17 11 23"/></svg>',
+  mist: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="17" y1="17" x2="7" y2="17"/><line x1="19" y1="13" x2="5" y2="13"/><line x1="20" y1="9" x2="4" y2="9"/><line x1="18" y1="5" x2="6" y2="5"/></svg>'
+};
+
+function wthrSVG(code) {
+  if (code === 0) return WTHR_ICONS.clear;
+  if (code <= 2) return WTHR_ICONS.partly;
+  if (code <= 3) return WTHR_ICONS.cloudy;
+  if (code <= 48) return WTHR_ICONS.mist;
+  if (code <= 67) return WTHR_ICONS.rain;
+  if (code <= 77) return WTHR_ICONS.snow;
+  if (code <= 86) return WTHR_ICONS.snow;
+  return WTHR_ICONS.thunder;
+}
+
+function wthrTxt(code) {
+  const m = { 0:'صافية',1:'صافية',2:'غائمة جزئياً',3:'غائمة',45:'ضباب',48:'ضباب',51:'رذاذ',53:'رذاذ',55:'رذاذ',61:'مطر',63:'مطر',65:'أمطار غزيرة',71:'ثلج',73:'ثلج',75:'ثلوج كثيفة',80:'زخات مطر',81:'زخات مطر',82:'زخات غزيرة',95:'عاصفة رعدية',96:'عاصفة رعدية',99:'عاصفة شديدة' };
+  return m[code] || '';
+}
+
+async function fetchWthr(lat, lon) {
+  const el = document.getElementById('weatherContent');
+  try {
+    const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m&timezone=auto`);
+    if (!r.ok) throw Error();
+    const d = await r.json(), c = d.current, code = c.weather_code;
+    el.innerHTML = `
+      <div class="weather-main">
+        <div class="weather-icon">${wthrSVG(code)}</div>
+        <span class="weather-temp">${Math.round(c.temperature_2m)}°</span>
+      </div>
+      <div class="weather-desc">${wthrTxt(code)}</div>
+      <div class="weather-meta">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg> ${Math.round(c.apparent_temperature)}°</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10"/><path d="M18 20v-4"/><path d="M6 20V4"/></svg> ${c.relative_humidity_2m}%</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg> ${Math.round(c.wind_speed_10m)}</span>
+      </div>`;
+  } catch {
+    el.innerHTML = '<div class="dim">تعذر تحميل الطقس</div>';
+  }
+}
+
+// Try to load stored background image
+(function(){
+  var stored = localStorage.getItem('superstart_bg');
+  if (stored) {
+    var el = document.getElementById('bgImage');
+    el.style.display = 'block';
+    el.style.background = 'url(' + stored + ') center/cover fixed no-repeat';
+    document.querySelector('.bg-layer').style.display = 'none';
+  }
+})();
+
+document.addEventListener('DOMContentLoaded', function() {
+  renderBookmarks();
+  renderTodos();
+  tick();
+  setInterval(tick, 1000);
+  fetchWthr(30.0444, 31.2357);
+
+  document.getElementById('searchInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      const q = this.value.trim();
+      if (q) window.open(`https://www.google.com/search?q=${encodeURIComponent(q)}`, '_blank');
+    }
+  });
+});
+</script>
+</body>
+</html>
